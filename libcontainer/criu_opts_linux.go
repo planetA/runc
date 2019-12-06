@@ -29,4 +29,5 @@ type CriuOpts struct {
 	AutoDedup               bool               // auto deduplication for incremental dumps
 	LazyPages               bool               // restore memory pages lazily using userfaultfd
 	StatusFd                int                // fd for feedback when lazy server is ready
+	External                []string           // list of external devices
 }

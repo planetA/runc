@@ -988,6 +988,10 @@ func (c *linuxContainer) Checkpoint(criuOpts *CriuOpts) error {
 		}
 	}
 
+	if criuOpts.External != nil && len(criuOpts.External) > 0 {
+		rpcOpts.External = append(rpcOpts.External, criuOpts.External...)
+	}
+
 	// append optional criu opts, e.g., page-server and port
 	if criuOpts.PageServer.Address != "" && criuOpts.PageServer.Port != 0 {
 		rpcOpts.Ps = &criurpc.CriuPageServerInfo{
@@ -1307,6 +1311,10 @@ func (c *linuxContainer) Restore(process *Process, criuOpts *CriuOpts) error {
 	// Same for PID namespaces.
 	if err := c.handleRestoringExternalNamespaces(req.Opts, &extraFiles, configs.NEWPID); err != nil {
 		return err
+	}
+
+	if criuOpts.External != nil && len(criuOpts.External) > 0 {
+		req.Opts.External = append(req.Opts.External, criuOpts.External...)
 	}
 
 	// This will modify the rootfs of the container in the same way runc
