@@ -942,10 +942,15 @@ func (c *linuxContainer) Checkpoint(criuOpts *CriuOpts) error {
 	}
 	defer imageDir.Close()
 
+	logLevel := criuOpts.LogLevel
+	if logLevel == CRIU_LOG_DEFAULT {
+		logLevel = CRIU_LOG_WARN
+	}
+
 	rpcOpts := criurpc.CriuOpts{
 		ImagesDirFd:     proto.Int32(int32(imageDir.Fd())),
 		WorkDirFd:       proto.Int32(int32(workDir.Fd())),
-		LogLevel:        proto.Int32(4),
+		LogLevel:        proto.Int32(int32(criuOpts.LogLevel) - 1),
 		LogFile:         proto.String("dump.log"),
 		Root:            proto.String(c.config.Rootfs),
 		ManageCgroups:   proto.Bool(true),

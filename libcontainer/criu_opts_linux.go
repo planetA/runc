@@ -2,6 +2,17 @@ package libcontainer
 
 import criu "github.com/checkpoint-restore/go-criu/v4/rpc"
 
+type CriuLogLevel int32
+
+const (
+	CRIU_LOG_DEFAULT CriuLogLevel = 0 + iota
+	CRIU_LOG_MSG
+	CRIU_LOG_ERROR
+	CRIU_LOG_WARN
+	CRIU_LOG_INFO
+	CRIU_LOG_DEBUG
+)
+
 type CriuPageServerInfo struct {
 	Address string // IP address of CRIU page server
 	Port    int32  // port number of CRIU page server
@@ -30,4 +41,5 @@ type CriuOpts struct {
 	LazyPages               bool               // restore memory pages lazily using userfaultfd
 	StatusFd                int                // fd for feedback when lazy server is ready
 	External                []string           // list of external devices
+	LogLevel                CriuLogLevel       // log verbosity level
 }
